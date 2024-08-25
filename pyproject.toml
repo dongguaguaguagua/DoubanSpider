@@ -1,0 +1,36 @@
+[project]
+name = "douban"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "hzy", email = "1448424184@qq.com" }
+]
+dependencies = [
+    # "frida==16.4.9",
+    # "frida-tools==12.5.0",
+    "frida==16.1.4",
+    "frida-tools==12.3.0",
+    "requests>=2.32.3",
+    "androguard>=4.1.2",
+    "pycryptodome>=3.20.0",
+    "objection>=1.11.0",
+    "setuptools>=73.0.1",
+    "chardet>=5.2.0",
+    "cryptography>=43.0.0",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/douban"]
