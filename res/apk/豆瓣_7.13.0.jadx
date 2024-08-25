@@ -1,0 +1,197 @@
+{
+  "projectVersion": 1,
+  "files": [
+    "豆瓣_7.13.0_APKPure.apk"
+  ],
+  "treeExpansions": [
+    [
+      "Source code",
+      "豆瓣_7.13.0_APKPure.apk"
+    ],
+    [
+      "Resources",
+      "豆瓣_7.13.0_APKPure.apk"
+    ],
+    [
+      "com",
+      "Source code",
+      "豆瓣_7.13.0_APKPure.apk"
+    ],
+    [
+      "network",
+      "frodo",
+      "douban",
+      "com",
+      "Source code",
+      "豆瓣_7.13.0_APKPure.apk"
+    ]
+  ],
+  "codeData": {
+    "comments": [],
+    "renames": []
+  },
+  "openTabs": [
+    {
+      "type": "class",
+      "tabPath": "com.douban.frodo.baseproject.util.FrodoUtils",
+      "subPath": "java",
+      "caret": 1173,
+      "view": {
+        "x": 0,
+        "y": 309
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "com.douban.frodo.network.ApiSignatureInterceptor",
+      "subPath": "java",
+      "caret": 1520,
+      "view": {
+        "x": 0,
+        "y": 399
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "com.douban.frodo.network.ApiSignatureHelper",
+      "subPath": "java",
+      "caret": 1812,
+      "view": {
+        "x": 0,
+        "y": 89
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "okhttp3.Request",
+      "subPath": "java",
+      "caret": 799,
+      "view": {
+        "x": 0,
+        "y": 245
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "com.douban.frodo.network.DefaultErrorListener",
+      "subPath": "java",
+      "caret": 84,
+      "view": {
+        "x": 0,
+        "y": 0
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "com.douban.frodo.network.HttpRequest",
+      "subPath": "java",
+      "caret": 440,
+      "view": {
+        "x": 0,
+        "y": 44
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "com.douban.frodo.network.FrodoRequestHandlerHelper",
+      "subPath": "java",
+      "caret": 201,
+      "view": {
+        "x": 0,
+        "y": 0
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "com.douban.frodo.network.FrodoApi",
+      "subPath": "java",
+      "caret": 262,
+      "view": {
+        "x": 0,
+        "y": 0
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "com.douban.push.internal.api.Request",
+      "subPath": "java",
+      "caret": 2591,
+      "view": {
+        "x": 0,
+        "y": 630
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "okhttp3.Headers",
+      "subPath": "java",
+      "caret": 822,
+      "view": {
+        "x": 0,
+        "y": 95
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "com.douban.frodo.utils.crypto.AES",
+      "subPath": "java",
+      "caret": 785,
+      "view": {
+        "x": 0,
+        "y": 0
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "com.douban.frodo.utils.crypto.HMACHash1",
+      "subPath": "java",
+      "caret": 466,
+      "view": {
+        "x": 0,
+        "y": 0
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "jodd.util.StringPool",
+      "subPath": "java",
+      "caret": 113,
+      "view": {
+        "x": 0,
+        "y": 0
+      },
+      "active": false
+    },
+    {
+      "type": "class",
+      "tabPath": "com.douban.live.internal.LiveHelper",
+      "subPath": "java",
+      "caret": 814,
+      "view": {
+        "x": 0,
+        "y": 0
+      },
+      "active": false
+    }
+  ],
+  "cacheDir": "/Users/hzy/Library/Caches/io.github.skylot.jadx/projects/豆瓣_7.13.0_APKPure-8794d43fda1a50d89b4d4e7b0fa1c42b",
+  "enableLiveReload": false,
+  "searchHistory": [
+    "bHUvfbiVZUmm2sQRKwiAcw",
+    "ApiSignatureHelper",
+    "\"_sig\""
+  ],
+  "pluginOptions": {}
+}

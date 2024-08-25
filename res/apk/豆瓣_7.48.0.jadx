@@ -1,0 +1,89 @@
+{
+  "projectVersion": 1,
+  "files": [
+    "豆瓣_7.48.0.apk"
+  ],
+  "treeExpansions": [
+    [
+      "Source code",
+      "豆瓣_7.48.0.apk"
+    ]
+  ],
+  "codeData": {
+    "comments": [
+      {
+        "nodeRef": {
+          "refType": "METHOD",
+          "declClass": "com.douban.frodo.baseproject.rexxar.view.FrodoRexxarView$RexxarContainerInterface",
+          "shortId": "decoratorUrl(Ljava/lang/String;)Ljava/lang/String;"
+        },
+        "codeRef": {
+          "attachType": "INSN",
+          "index": 96
+        },
+        "comment": "time_stamp",
+        "style": "LINE"
+      },
+      {
+        "nodeRef": {
+          "refType": "METHOD",
+          "declClass": "com.douban.zeno.ZenoConfig",
+          "shortId": "\u003cinit\u003e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;)V"
+        },
+        "codeRef": {
+          "attachType": "INSN",
+          "index": 43
+        },
+        "comment": "API_HOST \u003d \"frodo.douban.com\";",
+        "style": "LINE"
+      },
+      {
+        "nodeRef": {
+          "refType": "METHOD",
+          "declClass": "com.douban.zeno.ZenoConfig",
+          "shortId": "\u003cinit\u003e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;)V"
+        },
+        "codeRef": {
+          "attachType": "INSN",
+          "index": 45
+        },
+        "comment": "BaseApi.sig_secret_key2;",
+        "style": "LINE"
+      },
+      {
+        "nodeRef": {
+          "refType": "METHOD",
+          "declClass": "com.douban.zeno.ZenoConfig",
+          "shortId": "\u003cinit\u003e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/util/Map;Ljava/util/Map;)V"
+        },
+        "codeRef": {
+          "attachType": "INSN",
+          "index": 47
+        },
+        "comment": "BaseApi.sig_secret_key1;",
+        "style": "LINE"
+      }
+    ],
+    "renames": [
+      {
+        "nodeRef": {
+          "refType": "FIELD",
+          "declClass": "com.umeng.analytics.pro.ao",
+          "shortId": "h:Ljava/lang/String;"
+        },
+        "newName": "time_stamp"
+      }
+    ]
+  },
+  "openTabs": [],
+  "cacheDir": "/Users/hzy/Library/Caches/io.github.skylot.jadx/projects/豆瓣_7.48.0-f4bf0ea3b31b4759b21b8a241ec5cbe7",
+  "enableLiveReload": false,
+  "searchHistory": [
+    "\"_sig\"",
+    "ZenoConfig",
+    "sig_secret_key1",
+    "sig_secret_key2",
+    "mark_recommendations"
+  ],
+  "pluginOptions": {}
+}
