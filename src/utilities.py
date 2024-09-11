@@ -1,6 +1,10 @@
 from urllib.parse import urlencode, urlparse, parse_qs, urlunparse
 import json
+import time
 import sqlite3
+from get_headers import *
+from get_signature import *
+from get_secret import *
 
 def add_url_params(url, params):
     url_parts = list(urlparse(url))
@@ -9,6 +13,33 @@ def add_url_params(url, params):
     url_parts[4] = urlencode(query, doseq=True)
 
     return urlunparse(url_parts)
+
+def build_url(base_url, params):
+    config = load_config()
+
+    base_params = {
+        'apikey': get_apikey(),
+        'channel': config['channel'],
+        'udid': config['udid'],
+        's_rom': config['os_rom'],
+        'timezone': config['timezone']
+    }
+    base_url = add_url_params(base_url, params)
+    base_url = add_url_params(base_url, base_params)
+
+    timestamp = int(time.time())
+    secret_key = get_secret_key()
+    auth_params = {
+        '_ts': str(timestamp),
+        '_sig': get_signature(
+            base_url,
+            config['access_token'],
+            secret_key,
+            timestamp
+        )
+    }
+    url = add_url_params(base_url, auth_params)
+    return url
 
 def load_config():
     with open('config.json','r',encoding='utf8') as file:
@@ -37,51 +68,3 @@ def get_total_books_count(db_path):
     conn.close()
     return total_count
 
-def init_book_table(db_path):
-    conn = sqlite3.connect(str(db_path))
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS books (
-            id TEXT PRIMARY KEY,
-            title TEXT,
-            rating REAL,
-            rating_count INTEGER,
-            pubdate TEXT,
-            pages INTEGER,
-            cover_url TEXT,
-            sharing_url TEXT,
-            url TEXT,
-            author TEXT,
-            card_subtitle TEXT,
-            book_subtitle TEXT,
-            press TEXT,
-            update_time TEXT
-        )
-        ''')
-    conn.commit()
-    conn.close()
-
-def init_movie_table(db_path):
-    conn = sqlite3.connect(str(db_path))
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS movies (
-            id TEXT PRIMARY KEY,
-            title TEXT,
-            rating REAL,
-            rating_count INTEGER,
-            pubdate TEXT,
-            year TEXT,
-            genres TEXT,
-            durations TEXT,
-            cover_url TEXT,
-            sharing_url TEXT,
-            countries TEXT,
-            url TEXT,
-            directors TEXT,
-            actors TEXT,
-            update_time TEXT
-        )
-        ''')
-    conn.commit()
-    conn.close()
