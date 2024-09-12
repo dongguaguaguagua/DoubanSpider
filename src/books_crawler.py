@@ -35,7 +35,27 @@ def get_interests(book_id):
     init_interests_table('books.db')
     insert_interests('books.db', data)
 
-def recommand_data(config, round):
+def from_user_get_books(user_id, round):
+    headers = get_headers()
+    start = round * int(config['data_count'])
+    base_url = f'https://frodo.douban.com/api/v2/user/{user_id}/interests'
+    custom_params = {
+        'type': 'book',
+        'status': 'done',
+        'start': str(start),
+        'count': config['data_count'],
+        'common_interest': 0
+    }
+    url = build_url(base_url, custom_params)
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    data["subjects"] = [interest["subject"] for interest in data["interests"]]
+    save_data(data, 'latest_books_from_user.json')
+    init_books_table('books.db')
+    insert_books('books.db', data)
+
+
+def get_recommendations(config, round):
     headers = get_headers()
     start = round * int(config['data_count'])
     base_url = 'https://frodo.douban.com/api/v2/noviciate/mark_recommendations'
@@ -70,10 +90,11 @@ config = load_config()
 #     _round = 0
 #     is_continue = True
 #     while(is_continue is True):
-#         is_continue = recommand_data(config=config, round=_round)
+#         is_continue = get_recommendations(config=config, round=_round)
 #         # sys.stdout.flush()  # 强制刷新输出缓冲区
 #         _round += 1
 #         time.sleep(20)
-# recommand_data(config=config, round=0)
-# recommand_data(config=config, round=0)
-get_interests(35620036)
+# get_recommendations(config=config, round=0)
+# get_recommendations(config=config, round=0)
+# get_interests(35620036)
+from_user_get_books(2303117, 0)
