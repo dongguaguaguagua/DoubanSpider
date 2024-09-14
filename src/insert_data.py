@@ -7,25 +7,43 @@ def insert_books(db_path, data):
 
     # 插入数据
     for subject in data['subjects']:
-        id = subject['id']
-        title = subject['title']
-        rating = subject['rating']['value']
-        rating_count = subject['rating']['count']
-        pubdate = ', '.join(subject['pubdate']) if subject['pubdate'] else None
-        pages = ', '.join(subject['pages'])
-        cover_url = subject['cover_url']
-        sharing_url = subject['sharing_url']
-        url = subject['url']
-        author = ', '.join(subject['author']) if subject['author'] else None
-        card_subtitle = subject['card_subtitle']
-        book_subtitle = subject['book_subtitle']
-        press = ', '.join(subject['press'])
+        id = subject.get('id')
+        title = subject.get('title')
+        rating = subject.get('rating', {}).get('value')
+        rating_count = subject.get('rating', {}).get('count')
+        pubdate = ', '.join(subject.get('pubdate', []))
+        pages = ', '.join(subject.get('pages', []))
+        cover_url = subject.get('cover_url')
+        sharing_url = subject.get('sharing_url')
+        url = subject.get('url')
+        author = ', '.join(subject.get('author', []))
+        card_subtitle = subject.get('card_subtitle')
+        book_subtitle = subject.get('book_subtitle')
+        press = ', '.join(subject.get('press', []))
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        is_visited = 0
 
+        # 先插入一行数据，设置 is_visited = 0 ,然后如果插入的id冲突
+        # 就表示已经存在过，那么不要更改 is_visited 的值，其余都更改一遍。
         cursor.execute('''
-        INSERT OR REPLACE INTO books (id, title, rating, rating_count, pubdate, pages, cover_url, sharing_url, url, author, card_subtitle, book_subtitle, press, update_time)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (id, title, rating, rating_count, pubdate, pages, cover_url, sharing_url, url, author, card_subtitle, book_subtitle, press, update_time))
+        INSERT INTO books (id, title, rating, rating_count, pubdate, pages, cover_url, sharing_url, url, author, card_subtitle, book_subtitle, press, is_visited, update_time)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT (id)
+        DO UPDATE SET
+            title = excluded.title,
+            rating = excluded.rating,
+            rating_count = excluded.rating_count,
+            pubdate = excluded.pubdate,
+            pages = excluded.pages,
+            cover_url = excluded.cover_url,
+            sharing_url = excluded.sharing_url,
+            url = excluded.url,
+            author = excluded.author,
+            card_subtitle = excluded.card_subtitle,
+            book_subtitle = excluded.book_subtitle,
+            press = excluded.press,
+            update_time = excluded.update_time;
+        ''', (id, title, rating, rating_count, pubdate, pages, cover_url, sharing_url, url, author, card_subtitle, book_subtitle, press, is_visited, update_time))
 
     conn.commit()
     conn.close()
@@ -36,17 +54,25 @@ def insert_small_books(db_path, data):
     cursor = conn.cursor()
 
     for subject in data['subjects']:
-        id = subject['id']
-        title = subject['title']
-        rating = subject['rating']['value']
-        rating_count = subject['rating']['count']
-        url = subject['url']
+        id = subject.get('id')
+        title = subject.get('title')
+        rating = subject.get('rating', {}).get('value')
+        rating_count = subject.get('rating', {}).get('count')
+        url = subject.get('url')
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        is_visited = 0
 
         cursor.execute('''
-        INSERT OR REPLACE INTO books (id, title, rating, rating_count, url, update_time)
-        VALUES (?, ?, ?, ?, ?, ?)
-        ''', (id, title, rating, rating_count, url, update_time))
+        INSERT INTO books (id, title, rating, rating_count, url, is_visited, update_time)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT (id)
+        DO UPDATE SET
+            title = excluded.title,
+            rating = excluded.rating,
+            rating_count = excluded.rating_count,
+            url = excluded.url,
+            update_time = excluded.update_time;
+        ''', (id, title, rating, rating_count, url, is_visited, update_time))
 
     conn.commit()
     conn.close()
@@ -57,25 +83,26 @@ def insert_movies(db_path, data):
 
     # 插入数据
     for subject in data['subjects']:
-        id = subject['id']
-        title = subject['title']
-        rating = subject['rating']['value']
-        rating_count = subject['rating']['count']
-        pubdate = ', '.join(subject['pubdate']) if subject['pubdate'] else None
-        year = subject['year']
-        genres = ', '.join(subject['genres'])
-        durations = ', '.join(subject['durations'])
-        cover_url = subject['cover_url']
-        sharing_url = subject['sharing_url']
-        countries = ', '.join(subject['countries'])
-        url = subject['url']
-        directors = ', '.join([director['name'] for director in subject['directors']])
-        actors = ', '.join([actor['name'] for actor in subject['actors']])
+        id = subject.get('id')
+        title = subject.get('title')
+        rating = subject.get('rating', {}).get('value')
+        rating_count = subject.get('rating', {}).get('count')
+        pubdate = ', '.join(subject.get('pubdate', []))
+        year = subject.get('year')
+        genres = ', '.join(subject.get('genres', []))
+        durations = ', '.join(subject.get('durations', []))
+        cover_url = subject.get('cover_url')
+        sharing_url = subject.get('sharing_url')
+        countries = ', '.join(subject.get('countries', []))
+        url = subject.get('url')
+        directors = ', '.join([director.get('name') for director in subject.get('directors', [])])
+        actors = ', '.join([actor.get('name') for actor in subject.get('actors', [])])
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         cursor.execute('''
-        INSERT OR REPLACE INTO movies (id, title, rating, rating_count, pubdate, year, genres, durations, cover_url, sharing_url, countries, url, directors, actors, update_time)
+        INSERT INTO movies (id, title, rating, rating_count, pubdate, year, genres, durations, cover_url, sharing_url, countries, url, directors, actors, update_time)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+
         ''', (id, title, rating, rating_count, pubdate, year, genres, durations, cover_url, sharing_url, countries, url, directors, actors, update_time))
 
     conn.commit()
@@ -86,21 +113,33 @@ def insert_doulists(db_path, data):
     cursor = conn.cursor()
 
     for subject in data['doulists']:
-        id = subject['id']
-        title = subject['title']
-        cover_url = subject['cover_url']
-        sharing_url = subject['sharing_url']
-        url = subject['url']
-        items_count = subject['items_count']
-        followers_count = subject['followers_count']
-        owner_id = subject['owner']['id']
-        owner_uid = subject['owner']['uid']
+        id = subject.get('id')
+        title = subject.get('title')
+        cover_url = subject.get('cover_url')
+        sharing_url = subject.get('sharing_url')
+        url = subject.get('url')
+        items_count = subject.get('items_count')
+        followers_count = subject.get('followers_count')
+        owner_id = subject.get('owner', {}).get('id')
+        owner_uid = subject.get('owner', {}).get('uid')
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        is_visited = 0
 
         cursor.execute('''
-        INSERT OR REPLACE INTO doulists (id, title, cover_url, sharing_url, url, items_count, followers_count, owner_id, owner_uid, update_time)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (id, title, cover_url, sharing_url, url, items_count, followers_count, owner_id, owner_uid, update_time))
+        INSERT OR REPLACE INTO doulists (id, title, cover_url, sharing_url, url, items_count, followers_count, owner_id, owner_uid, is_visited, update_time)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT (id)
+        DO UPDATE SET
+            title = excluded.title,
+            cover_url = excluded.cover_url,
+            sharing_url = excluded.sharing_url,
+            url = excluded.url,
+            items_count = excluded.items_count,
+            followers_count = excluded.followers_count,
+            owner_id = excluded.owner_id,
+            owner_uid = excluded.owner_uid,
+            update_time = excluded.update_time;
+        ''', (id, title, cover_url, sharing_url, url, items_count, followers_count, owner_id, owner_uid, is_visited, update_time))
 
     conn.commit()
     conn.close()
@@ -111,20 +150,31 @@ def insert_interests(db_path, data):
     cursor = conn.cursor()
 
     for subject in data['interests']:
-        id = subject['id']
-        comment = subject['comment']
-        rating = subject['rating']['value'] if subject['rating'] != None else None
-        sharing_url = subject['sharing_url']
-        create_time = subject['create_time']
-        user_id = subject['user']['id']
-        user_gender = subject['user']['gender']
-        user_name = subject['user']['name']
+        id = subject.get('id')
+        comment = subject.get('comment')
+        rating = subject.get('rating', {}).get('value')
+        sharing_url = subject.get('sharing_url')
+        create_time = subject.get('create_time')
+        user_id = subject.get('user', {}).get('id')
+        user_gender = subject.get('user', {}).get('gender')
+        user_name = subject.get('user', {}).get('name')
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        is_visited = 0
 
         cursor.execute('''
-        INSERT OR REPLACE INTO interests (id, comment, rating, sharing_url, create_time, user_id, user_gender, user_name, update_time)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (id, comment, rating, sharing_url, create_time, user_id, user_gender, user_name, update_time))
+        INSERT OR REPLACE INTO interests (id, comment, rating, sharing_url, create_time, user_id, user_gender, user_name, is_visited, update_time)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT (id)
+        DO UPDATE SET
+            comment = excluded.comment,
+            rating = excluded.rating,
+            sharing_url = excluded.sharing_url,
+            create_time = excluded.create_time,
+            user_id = excluded.user_id,
+            user_gender = excluded.user_gender,
+            user_name = excluded.user_name,
+            update_time = excluded.update_time;
+        ''', (id, comment, rating, sharing_url, create_time, user_id, user_gender, user_name, is_visited, update_time))
 
     conn.commit()
     conn.close()

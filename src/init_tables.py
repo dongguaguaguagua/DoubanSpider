@@ -14,6 +14,7 @@ def init_doulists_table(db_path):
             followers_count INTEGER,
             owner_id TEXT,
             owner_uid TEXT,
+            is_visited INTEGER,
             update_time TEXT
         )
         ''')
@@ -38,6 +39,7 @@ def init_books_table(db_path):
             card_subtitle TEXT,
             book_subtitle TEXT,
             press TEXT,
+            is_visited INTEGER,
             update_time TEXT
         )
         ''')
@@ -57,6 +59,7 @@ def init_interests_table(db_path):
             user_id TEXT,
             user_gender TEXT,
             user_name TEXT,
+            is_visited INTEGER,
             update_time TEXT
         )
         ''')
