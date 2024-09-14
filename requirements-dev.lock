@@ -104,6 +104,8 @@ mutf8==1.0.6
     # via androguard
 networkx==3.3
     # via androguard
+ninja==1.11.1.1
+    # via douban
 numpy==2.0.1
     # via contourpy
     # via matplotlib

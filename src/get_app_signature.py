@@ -27,7 +27,6 @@ with open('app_signature_base64.txt', 'r') as f:
 
 # 解码Base64字符串
 decoded_bytes = base64.b64decode(app_signature_base64)
-print(decoded_bytes)
 
 
 

@@ -68,3 +68,85 @@ def get_total_books_count(db_path):
     conn.close()
     return total_count
 
+def get_all_unvisited(db_path, table_name, column):
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+    query = f"""
+        SELECT {column}
+        FROM {table_name}
+        WHERE is_visited = 0
+        ORDER BY update_time ASC, id ASC;
+    """
+    cursor.execute(query)
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return [row[0] for row in result]
+
+def get_latest_unvisited(db_path, table_name, column):
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+    query = f"""
+        SELECT {column}
+        FROM {table_name}
+        WHERE is_visited = 0
+        ORDER BY update_time ASC, id ASC
+        LIMIT 1;
+    """
+    cursor.execute(query)
+    result = cursor.fetchone()[0]
+    cursor.close()
+    conn.close()
+    return result
+
+def mark_visited(db_path, table_name, column, target_id):
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+
+    query = f"""
+        UPDATE {table_name}
+        SET is_visited = 1
+        WHERE {column} = '{target_id}';
+    """
+    cursor.execute(query)
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def from_id_get_data(db_path, table_name, column, target_id):
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+    query = f"""
+        SELECT {column}
+        FROM {table_name}
+        WHERE id = '{target_id}'
+        LIMIT 1;
+    """
+    cursor.execute(query)
+    result = cursor.fetchone()[0]
+    cursor.close()
+    conn.close()
+
+    return result
+
+def get_doulist_api_base_url(sharing_url):
+    if sharing_url.startswith("https://m.douban.com/subject_collection/"):
+        doulist_id = sharing_url.split("/subject_collection/")[1]
+        return f"https://frodo.douban.com/api/v2/subject_collection/{doulist_id}/items"
+
+    elif sharing_url.startswith("https://www.douban.com/doulist/"):
+        doulist_id = sharing_url.split("/doulist/")[1]
+        return f"https://frodo.douban.com/api/v2/doulist/{doulist_id}/posts"
+
+    else:
+        return None
+
+def is_official_doulist(sharing_url):
+    if sharing_url.startswith("https://m.douban.com/subject_collection/"):
+        return True
+
+    elif sharing_url.startswith("https://www.douban.com/doulist/"):
+        return False
+
+    else:
+        return None

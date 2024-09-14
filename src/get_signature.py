@@ -39,9 +39,10 @@ def get_signature(url_path, bearer_key, secret_key, timestamp) -> str:
 
     return signature
 
-print(get_signature(
-    url_path="https://frodo.douban.com/api/v2/user/165389773/interests?type=movie&status=done&start=100&count=20&common_interest=0&apikey=0dad551ec0f84ed02907ff5c42e8ec70&channel=Huawei_Market&udid=1bda1ed0f16fa2e16734de5ed9b7d639d155ec2a&os_rom=miui6&oaid=7b184f162f3d188e&timezone=Asia/Shanghai",
-    bearer_key="c42a3dc7a510e0814c7eb956ef32a183",
-    secret_key=get_secret_key(),
-    timestamp=1724508124,
-))
+if __name__ == '__main__':
+    print(get_signature(
+        url_path="https://frodo.douban.com/api/v2/user/165389773/interests?type=movie&status=done&start=100&count=20&common_interest=0&apikey=0dad551ec0f84ed02907ff5c42e8ec70&channel=Huawei_Market&udid=1bda1ed0f16fa2e16734de5ed9b7d639d155ec2a&os_rom=miui6&oaid=7b184f162f3d188e&timezone=Asia/Shanghai",
+        bearer_key="c42a3dc7a510e0814c7eb956ef32a183",
+        secret_key=get_secret_key(),
+        timestamp=1724508124,
+    ))
