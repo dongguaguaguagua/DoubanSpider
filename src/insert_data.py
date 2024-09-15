@@ -9,8 +9,8 @@ def insert_books(db_path, data):
     for subject in data['subjects']:
         id = subject.get('id')
         title = subject.get('title')
-        rating = subject.get('rating', {}).get('value')
-        rating_count = subject.get('rating', {}).get('count')
+        rating = subject.get('rating', {}).get('value') if subject.get('rating') else None
+        rating_count = subject.get('rating', {}).get('count') if subject.get('rating') else None
         pubdate = ', '.join(subject.get('pubdate', []))
         pages = ', '.join(subject.get('pages', []))
         cover_url = subject.get('cover_url')
@@ -56,8 +56,8 @@ def insert_small_books(db_path, data):
     for subject in data['subjects']:
         id = subject.get('id')
         title = subject.get('title')
-        rating = subject.get('rating', {}).get('value')
-        rating_count = subject.get('rating', {}).get('count')
+        rating = subject.get('rating', {}).get('value') if subject.get('rating') else None
+        rating_count = subject.get('rating', {}).get('count') if subject.get('rating') else None
         url = subject.get('url')
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         is_visited = 0
@@ -85,8 +85,8 @@ def insert_movies(db_path, data):
     for subject in data['subjects']:
         id = subject.get('id')
         title = subject.get('title')
-        rating = subject.get('rating', {}).get('value')
-        rating_count = subject.get('rating', {}).get('count')
+        rating = subject.get('rating', {}).get('value') if subject.get('rating') else None
+        rating_count = subject.get('rating', {}).get('count') if subject.get('rating') else None
         pubdate = ', '.join(subject.get('pubdate', []))
         year = subject.get('year')
         genres = ', '.join(subject.get('genres', []))
@@ -120,8 +120,8 @@ def insert_doulists(db_path, data):
         url = subject.get('url')
         items_count = subject.get('items_count')
         followers_count = subject.get('followers_count')
-        owner_id = subject.get('owner', {}).get('id')
-        owner_uid = subject.get('owner', {}).get('uid')
+        owner_id = subject.get('owner', {}).get('id') if subject.get('owner') else None
+        owner_uid = subject.get('owner', {}).get('uid') if subject.get('owner') else None
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         is_visited = 0
 
@@ -152,12 +152,12 @@ def insert_interests(db_path, data):
     for subject in data['interests']:
         id = subject.get('id')
         comment = subject.get('comment')
-        rating = subject.get('rating', {}).get('value')
+        rating = subject.get('rating', {}).get('value') if subject.get('rating') else None
         sharing_url = subject.get('sharing_url')
         create_time = subject.get('create_time')
-        user_id = subject.get('user', {}).get('id')
-        user_gender = subject.get('user', {}).get('gender')
-        user_name = subject.get('user', {}).get('name')
+        user_id = subject.get('user', {}).get('id') if subject.get('user') else None
+        user_gender = subject.get('user', {}).get('gender') if subject.get('user') else None
+        user_name = subject.get('user', {}).get('name') if subject.get('user') else None
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         is_visited = 0
 
