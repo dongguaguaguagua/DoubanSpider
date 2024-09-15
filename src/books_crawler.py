@@ -143,8 +143,8 @@ if __name__ == '__main__':
     log_message("initiating database and generating seed data...")
     get_recommendations(db_path, data_count, 0)
 
-    while(True):
-        book_id = get_latest_unvisited(db_path, 'books', 'id')
+    while(get_random_unvisited(db_path, 'books', 'id') not None):
+        book_id = get_random_unvisited(db_path, 'books', 'id')
         book_title = from_id_get_data(db_path, 'books', 'title', book_id)
         log_message(f"working on book id: {book_id}, title: {book_title}")
 
@@ -165,5 +165,4 @@ if __name__ == '__main__':
             mark_visited(db_path, 'interests', 'user_id', user_id)
 
         mark_visited(db_path, 'books', 'id', book_id)
-
 
