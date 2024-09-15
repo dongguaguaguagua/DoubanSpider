@@ -5,6 +5,7 @@ import sqlite3
 from get_headers import *
 from get_signature import *
 from get_secret import *
+import random
 
 def add_url_params(url, params):
     url_parts = list(urlparse(url))
@@ -150,3 +151,12 @@ def is_official_doulist(sharing_url):
 
     else:
         return None
+
+def log_message(message):
+    print(message)
+    with open('log.txt', 'a', encoding='utf-8') as log_file:
+        log_file.write(message + '\n')
+
+def random_break():
+    rand = random.randint(5, 20)
+    time.sleep(rand)
