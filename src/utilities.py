@@ -100,6 +100,22 @@ def get_latest_unvisited(db_path, table_name, column):
     conn.close()
     return result
 
+def get_random_unvisited(db_path, table_name, column):
+    conn = sqlite3.connect(str(db_path))
+    cursor = conn.cursor()
+    query = f"""
+        SELECT {column}
+        FROM {table_name}
+        WHERE is_visited = 0
+        ORDER BY RANDOM()
+        LIMIT 1;
+    """
+    cursor.execute(query)
+    result = cursor.fetchone()[0]
+    cursor.close()
+    conn.close()
+    return result
+
 def mark_visited(db_path, table_name, column, target_id):
     conn = sqlite3.connect(str(db_path))
     cursor = conn.cursor()
