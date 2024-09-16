@@ -1,6 +1,7 @@
 import requests
 import json
-
+from utilities import *
+from get_headers import *
 # cookies = {
 #     'bid': '4Xl28mUhvMg',
 # }
@@ -27,7 +28,12 @@ import json
 #     cookies=cookies,
 #     headers=headers,
 # )
-with open('../response/[284] response_frodo.douban.com_mark_recommendations.json','r',encoding='utf8')as file:
-    response = json.load(file)
-
-print(len(response['subjects']))
+headers = get_headers()
+base_url = "https://frodo.douban.com/api/v2/book/26385083"
+custom_params = {
+    # 'count': 10,
+}
+url = build_url(base_url, custom_params)
+response = requests.get(url, headers=headers)
+data = response.json()
+print(data)

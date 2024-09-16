@@ -85,6 +85,7 @@ def init_movies_table(db_path):
             url TEXT,
             directors TEXT,
             actors TEXT,
+            is_visited INTEGER,
             update_time TEXT
         )
         ''')

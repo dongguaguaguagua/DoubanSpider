@@ -98,12 +98,28 @@ def insert_movies(db_path, data):
         directors = ', '.join([director.get('name') for director in subject.get('directors', [])])
         actors = ', '.join([actor.get('name') for actor in subject.get('actors', [])])
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        is_visited = 0
 
         cursor.execute('''
-        INSERT INTO movies (id, title, rating, rating_count, pubdate, year, genres, durations, cover_url, sharing_url, countries, url, directors, actors, update_time)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-
-        ''', (id, title, rating, rating_count, pubdate, year, genres, durations, cover_url, sharing_url, countries, url, directors, actors, update_time))
+        INSERT INTO movies (id, title, rating, rating_count, pubdate, year, genres, durations, cover_url, sharing_url, countries, url, directors, actors, is_visited, update_time)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT (id)
+        DO UPDATE SET
+            title = excluded.title,
+            rating = excluded.rating,
+            rating_count = excluded.rating_count,
+            pubdate = excluded.pubdate,
+            year = excluded.year,
+            genres = excluded.genres,
+            durations = excluded.durations,
+            cover_url = excluded.cover_url,
+            sharing_url = excluded.sharing_url,
+            countries = excluded.countries,
+            url = excluded.url,
+            directors = excluded.directors,
+            actors = excluded.actors,
+            update_time = excluded.update_time;
+        ''', (id, title, rating, rating_count, pubdate, year, genres, durations, cover_url, sharing_url, countries, url, directors, actors, is_visited, update_time))
 
     conn.commit()
     conn.close()
@@ -126,7 +142,7 @@ def insert_doulists(db_path, data):
         is_visited = 0
 
         cursor.execute('''
-        INSERT OR REPLACE INTO doulists (id, title, cover_url, sharing_url, url, items_count, followers_count, owner_id, owner_uid, is_visited, update_time)
+        INSERT INTO doulists (id, title, cover_url, sharing_url, url, items_count, followers_count, owner_id, owner_uid, is_visited, update_time)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT (id)
         DO UPDATE SET
@@ -162,7 +178,7 @@ def insert_interests(db_path, data):
         is_visited = 0
 
         cursor.execute('''
-        INSERT OR REPLACE INTO interests (id, comment, rating, sharing_url, create_time, user_id, user_gender, user_name, is_visited, update_time)
+        INSERT INTO interests (id, comment, rating, sharing_url, create_time, user_id, user_gender, user_name, is_visited, update_time)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT (id)
         DO UPDATE SET
