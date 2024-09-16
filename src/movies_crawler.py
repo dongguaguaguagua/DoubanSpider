@@ -4,54 +4,165 @@ from get_headers import *
 from get_signature import *
 from get_secret import *
 from insert_data import *
+from init_tables import *
 
-def recommand_data(config, round):
+def get_related(db_path, movie_id):
     headers = get_headers()
-    start = round * int(config['data_count'])
+    base_url = f'https://frodo.douban.com/api/v2/movie/{movie_id}/related_items'
+    custom_params = {
+        'count': 10,
+    }
+    url = build_url(base_url, custom_params)
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    save_data(data, 'latest_movies_related.json')
+    init_movies_table(db_path)
+    init_doulists_table(db_path)
+    # insert_small_movies(db_path, data)
+    insert_doulists(db_path, data)
 
+def get_interests(db_path, movie_id):
+    headers = get_headers()
+    base_url = f'https://frodo.douban.com/api/v2/movie/{movie_id}/hot_interests'
+    custom_params = {
+        'status': 'done',
+        'following': 1
+    }
+    url = build_url(base_url, custom_params)
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    save_data(data, 'latest_movies_interests.json')
+    init_interests_table(db_path)
+    insert_interests(db_path, data)
+
+def from_user_get_movies(db_path, data_count, user_id, round):
+    headers = get_headers()
+    start = round * int(data_count)
+    base_url = f'https://frodo.douban.com/api/v2/user/{user_id}/interests'
+    custom_params = {
+        'type': 'movie',
+        'status': 'done',
+        'start': str(start),
+        'count': str(data_count),
+        'common_interest': 0
+    }
+    url = build_url(base_url, custom_params)
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    data["subjects"] = [interest["subject"] for interest in data["interests"]]
+    save_data(data, 'latest_movies_from_user.json')
+    init_movies_table(db_path)
+    insert_movies(db_path, data)
+
+    if(start > data['total']):
+        return False
+    return True
+
+def from_doulist_get_movies(db_path, data_count, doulist_id, round):
+    headers = get_headers()
+    start = round * int(data_count)
+    sharing_url = from_id_get_data(db_path, 'doulists', 'sharing_url', doulist_id)
+    base_url = get_doulist_api_base_url(sharing_url)
+    is_official = is_official_doulist(sharing_url)
+
+    custom_params = {
+        'start': str(start),
+        'count': str(data_count),
+        'undone': 0,
+        'buyable': 0,
+        'readable': 0
+    }
+    url = build_url(base_url, custom_params)
+    response = requests.get(url, headers=headers)
+    data = response.json()
+    save_data(data, 'latest_movies_from_doulist.json')
+    if(is_official == False):
+        data["subjects"] = [item["content"]["subject"] for item in data["items"]]
+    else:
+        data["subjects"] = [item for item in data["subject_collection_items"]]
+
+    init_movies_table(db_path)
+    insert_movies(db_path, data)
+
+    if(start > data['total']):
+        return False
+    return True
+
+def crawl_entire_doulist(db_path, data_count, doulist_id):
+    _round = 0
+    _continue = True
+    while(_continue is True):
+        _continue = from_doulist_get_movies(db_path, data_count, doulist_id, _round)
+        print(f'\t\tTotal movie count: {get_total_movies_count(db_path)}')
+        _round += 1
+        random_break()
+
+def crawl_entire_user(db_path, data_count, user_id):
+    _round = 0
+    _continue = True
+    while(_continue is True):
+        _continue = from_user_get_movies(db_path, data_count, user_id, _round)
+        print(f'\t\tTotal movie count: {get_total_movies_count(db_path)}')
+        _round += 1
+        random_break()
+
+def get_recommendations(db_path, data_count, round):
+    headers = get_headers()
+    start = round * int(data_count)
     base_url = 'https://frodo.douban.com/api/v2/noviciate/mark_recommendations'
     custom_params = {
-        'count': config['data_count'],
+        'count': str(data_count),
         'start': str(start),
         'kind': 'movie'
     }
     url = build_url(base_url, custom_params)
     response = requests.get(url, headers=headers)
     data = response.json()
-    save_data(data, 'latest_movie.json')
-
-    init_movie_table('movies.db')
-
-    total_movie_before = get_total_movies_count('movies.db')
-
-    insert_movies('movies.db', data)
-
+    save_data(data, 'latest_movies_recommendations.json')
+    init_movies_table(db_path)
+    total_movie_before = get_total_movies_count(db_path)
+    insert_movies(db_path, data)
     received_count = len(data['subjects'])
-
-    total_movie_after = get_total_movies_count('movies.db')
-
+    total_movie_after = get_total_movies_count(db_path)
     replaced_movie_count = total_movie_before + received_count - total_movie_after
-
     print(f'-------- round: {round}, start: {start} --------')
     print(f'Total movie count: {total_movie_after}')
     print(f'Replaced movies count: {replaced_movie_count}')
     print(f'Response total:{data['total']}')
-
     print(f"{received_count} Data has been inserted into the SQLite database.")
 
     if(start > data['total']):
         return False
-
     return True
 
-config = load_config()
+if __name__ == '__main__':
+    config = load_config()
+    db_path = 'movies.db'
+    data_count = config['data_count']
+    # init database
+    print("initiating database and generating seed data...")
+    get_recommendations(db_path, data_count, 0)
 
-# for i in range(100):
-#     _round = 0
-#     is_continue = True
-#     while(is_continue is True):
-#         is_continue = recommand_data(config=config, round=_round)
-#         # sys.stdout.flush()  # 强制刷新输出缓冲区
-#         _round += 1
-#         time.sleep(20)
-recommand_data(config=config, round=0)
+    while(get_random_unvisited(db_path, 'movies', 'id') is not None):
+        movie_id = get_random_unvisited(db_path, 'movies', 'id')
+        movie_title = from_id_get_data(db_path, 'movies', 'title', movie_id)
+        print(f"working on movie id: {movie_id}, title: {movie_title}")
+
+        print(f"getting related movies and doulists for movie: {movie_title}")
+        get_related(db_path, movie_id)
+        doulists = get_all_unvisited(db_path, 'doulists', 'id')
+        for doulist_id in doulists:
+            print(f"\tworking on doulist: {doulist_id}")
+            crawl_entire_doulist(db_path, data_count, doulist_id)
+            mark_visited(db_path, 'doulists', 'id', doulist_id)
+
+        print(f"getting related user comments for movie: {movie_title}")
+        get_interests(db_path, movie_id)
+        users = get_all_unvisited(db_path, 'interests', 'user_id')
+        for user_id in users:
+            print(f"\tworking on user:{user_id}")
+            crawl_entire_user(db_path, data_count, user_id)
+            mark_visited(db_path, 'interests', 'user_id', user_id)
+
+        mark_visited(db_path, 'movies', 'id', movie_id)
+
