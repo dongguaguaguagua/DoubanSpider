@@ -48,7 +48,7 @@ def load_config():
     return config
 
 def save_data(data, fileName):
-    with open(fileName, 'w') as file:
+    with open(fileName, 'w', errors='ignore') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
 def get_total_movies_count(db_path):
