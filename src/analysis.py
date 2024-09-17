@@ -23,7 +23,7 @@ sns.lineplot(x=range(len(y_values)), y=y_values)
 
 # 设置图表标题和轴标签
 plt.title('Total Book Count Over Time')
-plt.xlabel('Time')
+plt.xlabel('Requests')
 plt.ylabel('Total Book Count')
 
 # 显示图表
