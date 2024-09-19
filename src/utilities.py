@@ -168,9 +168,9 @@ def is_official_doulist(sharing_url):
     else:
         return None
 
-def log_message(message):
+def log_message(message, path):
     print(message)
-    with open('log.txt', 'a', encoding='utf-8') as log_file:
+    with open(path, 'a', encoding='utf-8') as log_file:
         log_file.write(message + '\n')
 
 def random_break():

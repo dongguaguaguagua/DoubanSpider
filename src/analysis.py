@@ -6,10 +6,10 @@ import seaborn as sns
 y_values = []
 
 # 读取log.txt文件
-with open('log.txt', 'r', encoding='utf-8') as file:
+with open('movie_log.txt', 'r', encoding='utf-8') as file:
     for line in file:
         # 使用正则表达式匹配 "Total book count: " 后面的数字
-        match = re.search(r'Total book count:\s*(\d+)', line)
+        match = re.search(r'Total movie count:\s*(\d+)', line)
         if match:
             # 提取数字并将其添加到y_values列表中
             y_values.append(int(match.group(1)))
