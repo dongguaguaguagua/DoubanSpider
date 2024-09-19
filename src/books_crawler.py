@@ -93,7 +93,7 @@ def crawl_entire_doulist(db_path, data_count, doulist_id):
     _continue = True
     while(_continue is True):
         _continue = from_doulist_get_books(db_path, data_count, doulist_id, _round)
-        log_message(f'\t\tTotal book count: {get_total_books_count(db_path)}')
+        log_message(f'\t\tTotal book count: {get_total_books_count(db_path)}','book_log.txt')
         _round += 1
         random_break()
 
@@ -102,7 +102,7 @@ def crawl_entire_user(db_path, data_count, user_id):
     _continue = True
     while(_continue is True):
         _continue = from_user_get_books(db_path, data_count, user_id, _round)
-        log_message(f'\t\tTotal book count: {get_total_books_count(db_path)}')
+        log_message(f'\t\tTotal book count: {get_total_books_count(db_path)}','book_log.txt')
         _round += 1
         random_break()
 
@@ -140,27 +140,27 @@ if __name__ == '__main__':
     db_path = config['db_path']
     data_count = config['data_count']
     # init database
-    log_message("initiating database and generating seed data...")
+    log_message("initiating database and generating seed data...",'book_log.txt')
     get_recommendations(db_path, data_count, 0)
 
     while(get_random_unvisited(db_path, 'books', 'id') is not None):
         book_id = get_random_unvisited(db_path, 'books', 'id')
         book_title = from_id_get_data(db_path, 'books', 'title', book_id)
-        log_message(f"working on book id: {book_id}, title: {book_title}")
+        log_message(f"working on book id: {book_id}, title: {book_title}",'book_log.txt')
 
-        log_message(f"getting related books and doulists for book: {book_title}")
+        log_message(f"getting related books and doulists for book: {book_title}",'book_log.txt')
         get_related(db_path, book_id)
         doulists = get_all_unvisited(db_path, 'doulists', 'id')
         for doulist_id in doulists:
-            log_message(f"\tworking on doulist: {doulist_id}")
+            log_message(f"\tworking on doulist: {doulist_id}",'book_log.txt')
             crawl_entire_doulist(db_path, data_count, doulist_id)
             mark_visited(db_path, 'doulists', 'id', doulist_id)
 
-        log_message(f"getting related user comments for book: {book_title}")
+        log_message(f"getting related user comments for book: {book_title}",'book_log.txt')
         get_interests(db_path, book_id)
         users = get_all_unvisited(db_path, 'interests', 'user_id')
         for user_id in users:
-            log_message(f"\tworking on user:{user_id}")
+            log_message(f"\tworking on user:{user_id}",'book_log.txt')
             crawl_entire_user(db_path, data_count, user_id)
             mark_visited(db_path, 'interests', 'user_id', user_id)
 

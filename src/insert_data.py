@@ -175,7 +175,7 @@ def insert_interests(db_path, data):
         user_gender = subject.get('user', {}).get('gender') if subject.get('user') else None
         user_name = subject.get('user', {}).get('name') if subject.get('user') else None
         update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        is_visited = check_user_exists(db_path)
+        is_visited = check_user_exists(db_path, user_id)
 
         cursor.execute('''
         INSERT INTO interests (id, comment, rating, sharing_url, create_time, user_id, user_gender, user_name, is_visited, update_time)
@@ -195,10 +195,10 @@ def insert_interests(db_path, data):
     conn.commit()
     conn.close()
 
-def check_user_exists(db_path):
+def check_user_exists(db_path, user_id):
     conn = sqlite3.connect(str(db_path))
     cursor = conn.cursor()
-    cursor.execute("SELECT COUNT(*) FROM interests WHERE user_id = ?", (user_id_value,))
+    cursor.execute("SELECT COUNT(*) FROM interests WHERE user_id = ?", (user_id,))
     user_exists = cursor.fetchone()[0] > 0
     conn.commit()
     conn.close()

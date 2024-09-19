@@ -93,7 +93,7 @@ def crawl_entire_doulist(db_path, data_count, doulist_id):
     _continue = True
     while(_continue is True):
         _continue = from_doulist_get_movies(db_path, data_count, doulist_id, _round)
-        print(f'\t\tTotal movie count: {get_total_movies_count(db_path)}')
+        log_message(f'\t\tTotal movie count: {get_total_movies_count(db_path)}','movie_log.txt')
         _round += 1
         random_break()
 
@@ -102,7 +102,7 @@ def crawl_entire_user(db_path, data_count, user_id):
     _continue = True
     while(_continue is True):
         _continue = from_user_get_movies(db_path, data_count, user_id, _round)
-        print(f'\t\tTotal movie count: {get_total_movies_count(db_path)}')
+        log_message(f'\t\tTotal movie count: {get_total_movies_count(db_path)}','movie_log.txt')
         _round += 1
         random_break()
 
@@ -125,11 +125,11 @@ def get_recommendations(db_path, data_count, round):
     received_count = len(data['subjects'])
     total_movie_after = get_total_movies_count(db_path)
     replaced_movie_count = total_movie_before + received_count - total_movie_after
-    print(f'-------- round: {round}, start: {start} --------')
-    print(f'Total movie count: {total_movie_after}')
-    print(f'Replaced movies count: {replaced_movie_count}')
-    print(f'Response total:{data['total']}')
-    print(f"{received_count} Data has been inserted into the SQLite database.")
+    log_message(f'-------- round: {round}, start: {start} --------','movie_log.txt')
+    log_message(f'Total movie count: {total_movie_after}','movie_log.txt')
+    log_message(f'Replaced movies count: {replaced_movie_count}','movie_log.txt')
+    log_message(f'Response total:{data['total']}','movie_log.txt')
+    log_message(f"{received_count} Data has been inserted into the SQLite database.",'movie_log.txt')
 
     if(start > data['total']):
         return False
@@ -140,27 +140,27 @@ if __name__ == '__main__':
     db_path = 'movies.db'
     data_count = config['data_count']
     # init database
-    print("initiating database and generating seed data...")
+    log_message("initiating database and generating seed data...",'movie_log.txt')
     get_recommendations(db_path, data_count, 0)
 
     while(get_random_unvisited(db_path, 'movies', 'id') is not None):
         movie_id = get_random_unvisited(db_path, 'movies', 'id')
         movie_title = from_id_get_data(db_path, 'movies', 'title', movie_id)
-        print(f"working on movie id: {movie_id}, title: {movie_title}")
+        log_message(f"working on movie id: {movie_id}, title: {movie_title}",'movie_log.txt')
 
-        print(f"getting related movies and doulists for movie: {movie_title}")
+        log_message(f"getting related movies and doulists for movie: {movie_title}",'movie_log.txt')
         get_related(db_path, movie_id)
         doulists = get_all_unvisited(db_path, 'doulists', 'id')
         for doulist_id in doulists:
-            print(f"\tworking on doulist: {doulist_id}")
+            log_message(f"\tworking on doulist: {doulist_id}",'movie_log.txt')
             crawl_entire_doulist(db_path, data_count, doulist_id)
             mark_visited(db_path, 'doulists', 'id', doulist_id)
 
-        print(f"getting related user comments for movie: {movie_title}")
+        log_message(f"getting related user comments for movie: {movie_title}",'movie_log.txt')
         get_interests(db_path, movie_id)
         users = get_all_unvisited(db_path, 'interests', 'user_id')
         for user_id in users:
-            print(f"\tworking on user:{user_id}")
+            log_message(f"\tworking on user:{user_id}",'movie_log.txt')
             crawl_entire_user(db_path, data_count, user_id)
             mark_visited(db_path, 'interests', 'user_id', user_id)
 
