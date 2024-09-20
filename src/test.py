@@ -28,12 +28,18 @@ from get_headers import *
 #     cookies=cookies,
 #     headers=headers,
 # )
-headers = get_headers()
-base_url = "https://frodo.douban.com/api/v2/book/26385083"
-custom_params = {
-    # 'count': 10,
-}
-url = build_url(base_url, custom_params)
-response = requests.get(url, headers=headers)
-data = response.json()
-print(data)
+
+# headers = get_headers()
+# base_url = "https://frodo.douban.com/api/v2/book/26385083"
+# custom_params = {
+#     # 'count': 10,
+# }
+# url = build_url(base_url, custom_params)
+# response = requests.get(url, headers=headers)
+# data = response.json()
+# print(data)
+
+with open('latest_movies_from_doulist.json','r') as f:
+    data = json.load(f)
+data["subjects"] = [interest.get("subject") for interest in data.get("interests")]
+

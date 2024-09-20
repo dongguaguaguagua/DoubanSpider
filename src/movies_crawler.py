@@ -49,12 +49,12 @@ def from_user_get_movies(db_path, data_count, user_id, round):
     url = build_url(base_url, custom_params)
     response = requests.get(url, headers=headers)
     data = response.json()
-    data["subjects"] = [interest["subject"] for interest in data["interests"]]
+    data["subjects"] = [interest.get("subject") for interest in data.get("interests", {})]
     save_data(data, 'latest_movies_from_user.json')
     init_movies_table(db_path)
     insert_movies(db_path, data)
 
-    if(start > data['total']):
+    if(start > data.get('total')):
         return False
     return True
 
@@ -77,14 +77,14 @@ def from_doulist_get_movies(db_path, data_count, doulist_id, round):
     data = response.json()
     save_data(data, 'latest_movies_from_doulist.json')
     if(is_official == False):
-        data["subjects"] = [item["content"]["subject"] for item in data["items"]]
+        data["subjects"] = [item.get("content").get("subject") for item in data.get("items", {})]
     else:
-        data["subjects"] = [item for item in data["subject_collection_items"]]
+        data["subjects"] = [item for item in data.get("subject_collection_items", {})]
 
     init_movies_table(db_path)
     insert_movies(db_path, data)
 
-    if(start > data['total']):
+    if(start > data.get('total')):
         return False
     return True
 
@@ -122,16 +122,16 @@ def get_recommendations(db_path, data_count, round):
     init_movies_table(db_path)
     total_movie_before = get_total_movies_count(db_path)
     insert_movies(db_path, data)
-    received_count = len(data['subjects'])
+    received_count = len(data.get('subjects'))
     total_movie_after = get_total_movies_count(db_path)
     replaced_movie_count = total_movie_before + received_count - total_movie_after
     log_message(f'-------- round: {round}, start: {start} --------','movie_log.txt')
     log_message(f'Total movie count: {total_movie_after}','movie_log.txt')
     log_message(f'Replaced movies count: {replaced_movie_count}','movie_log.txt')
-    log_message(f'Response total:{data['total']}','movie_log.txt')
+    log_message(f'Response total:{data.get('total')}','movie_log.txt')
     log_message(f"{received_count} Data has been inserted into the SQLite database.",'movie_log.txt')
 
-    if(start > data['total']):
+    if(start > data.get('total')):
         return False
     return True
 
