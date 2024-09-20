@@ -122,7 +122,7 @@ def get_recommendations(db_path, data_count, round):
     init_books_table(db_path)
     total_book_before = get_total_books_count(db_path)
     insert_books(db_path, data)
-    received_count = len(data['subjects'])
+    received_count = len(data.get('subjects'))
     total_book_after = get_total_books_count(db_path)
     replaced_book_count = total_book_before + received_count - total_book_after
     print(f'-------- round: {round}, start: {start} --------')

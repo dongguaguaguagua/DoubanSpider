@@ -2,6 +2,7 @@ import requests
 import json
 from utilities import *
 from get_headers import *
+from insert_data import *
 # cookies = {
 #     'bid': '4Xl28mUhvMg',
 # }
@@ -41,5 +42,5 @@ from get_headers import *
 
 with open('latest_movies_from_doulist.json','r') as f:
     data = json.load(f)
-data["subjects"] = [interest.get("subject") for interest in data.get("interests")]
+insert_doulists('movies.db', data)
 
