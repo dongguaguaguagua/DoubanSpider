@@ -6,7 +6,7 @@ def insert_books(db_path, data):
     cursor = conn.cursor()
 
     # 插入数据
-    for subject in data['subjects']:
+    for subject in data.get('subjects', {}):
         id = subject.get('id')
         title = subject.get('title')
         rating = subject.get('rating', {}).get('value') if subject.get('rating') else None
@@ -53,7 +53,7 @@ def insert_small_books(db_path, data):
     conn = sqlite3.connect(str(db_path))
     cursor = conn.cursor()
 
-    for subject in data['subjects']:
+    for subject in data.get('subjects', {}):
         id = subject.get('id')
         title = subject.get('title')
         rating = subject.get('rating', {}).get('value') if subject.get('rating') else None
@@ -82,7 +82,7 @@ def insert_movies(db_path, data):
     cursor = conn.cursor()
 
     # 插入数据
-    for subject in data['subjects']:
+    for subject in data.get('subjects', {}):
         id = subject.get('id')
         title = subject.get('title')
         rating = subject.get('rating', {}).get('value') if subject.get('rating') else None
@@ -128,7 +128,7 @@ def insert_doulists(db_path, data):
     conn = sqlite3.connect(str(db_path))
     cursor = conn.cursor()
 
-    for subject in data['doulists']:
+    for subject in data.get('doulists', {}):
         id = subject.get('id')
         title = subject.get('title')
         cover_url = subject.get('cover_url')
@@ -165,7 +165,7 @@ def insert_interests(db_path, data):
     conn = sqlite3.connect(str(db_path))
     cursor = conn.cursor()
 
-    for subject in data['interests']:
+    for subject in data.get('interests', {}):
         id = subject.get('id')
         comment = subject.get('comment')
         rating = subject.get('rating', {}).get('value') if subject.get('rating') else None
