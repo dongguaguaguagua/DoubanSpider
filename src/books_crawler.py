@@ -49,12 +49,12 @@ def from_user_get_books(db_path, data_count, user_id, round):
     url = build_url(base_url, custom_params)
     response = requests.get(url, headers=headers)
     data = response.json()
-    data["subjects"] = [interest["subject"] for interest in data["interests"]]
+    data["subjects"] = [interest.get("subject") for interest in data.get("interests", {})]
     save_data(data, 'latest_books_from_user.json')
     init_books_table(db_path)
     insert_books(db_path, data)
 
-    if(start > data['total']):
+    if(start > data.get('total')):
         return False
     return True
 
@@ -77,14 +77,14 @@ def from_doulist_get_books(db_path, data_count, doulist_id, round):
     data = response.json()
     save_data(data, 'latest_books_from_doulist.json')
     if(is_official == False):
-        data["subjects"] = [item["content"]["subject"] for item in data["items"]]
+        data["subjects"] = [item.get("content").get("subject") for item in data.get("items", {})]
     else:
-        data["subjects"] = [item for item in data["subject_collection_items"]]
+        data["subjects"] = [item for item in data.get("subject_collection_items", {})]
 
     init_books_table(db_path)
     insert_books(db_path, data)
 
-    if(start > data['total']):
+    if(start > data.get('total')):
         return False
     return True
 
@@ -128,10 +128,10 @@ def get_recommendations(db_path, data_count, round):
     print(f'-------- round: {round}, start: {start} --------')
     print(f'Total book count: {total_book_after}')
     print(f'Replaced books count: {replaced_book_count}')
-    print(f'Response total:{data['total']}')
+    print(f'Response total:{data.get('total')}')
     print(f"{received_count} Data has been inserted into the SQLite database.")
 
-    if(start > data['total']):
+    if(start > data.get('total')):
         return False
     return True
 
