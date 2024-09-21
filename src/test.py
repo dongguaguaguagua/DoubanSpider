@@ -3,6 +3,7 @@ import json
 from utilities import *
 from get_headers import *
 from insert_data import *
+from movies_crawler import *
 # cookies = {
 #     'bid': '4Xl28mUhvMg',
 # }
@@ -43,4 +44,5 @@ from insert_data import *
 with open('latest_movies_from_doulist.json','r') as f:
     data = json.load(f)
 insert_doulists('movies.db', data)
-
+start=10
+print(start > data.get('total', start))

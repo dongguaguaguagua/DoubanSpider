@@ -54,7 +54,7 @@ def from_user_get_books(db_path, data_count, user_id, round):
     init_books_table(db_path)
     insert_books(db_path, data)
 
-    if(start > data.get('total')):
+    if(start > data.get('total', start)):
         return False
     return True
 
@@ -84,7 +84,7 @@ def from_doulist_get_books(db_path, data_count, doulist_id, round):
     init_books_table(db_path)
     insert_books(db_path, data)
 
-    if(start > data.get('total')):
+    if(start > data.get('total', start)):
         return False
     return True
 
@@ -128,10 +128,10 @@ def get_recommendations(db_path, data_count, round):
     print(f'-------- round: {round}, start: {start} --------')
     print(f'Total book count: {total_book_after}')
     print(f'Replaced books count: {replaced_book_count}')
-    print(f'Response total:{data.get('total')}')
+    print(f'Response total:{data.get('total', start)}')
     print(f"{received_count} Data has been inserted into the SQLite database.")
 
-    if(start > data.get('total')):
+    if(start > data.get('total', start)):
         return False
     return True
 

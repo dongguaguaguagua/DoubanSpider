@@ -54,7 +54,7 @@ def from_user_get_movies(db_path, data_count, user_id, round):
     init_movies_table(db_path)
     insert_movies(db_path, data)
 
-    if(start > data.get('total')):
+    if(start > data.get('total', start)):
         return False
     return True
 
@@ -84,7 +84,7 @@ def from_doulist_get_movies(db_path, data_count, doulist_id, round):
     init_movies_table(db_path)
     insert_movies(db_path, data)
 
-    if(start > data.get('total')):
+    if(start > data.get('total', start)):
         return False
     return True
 
@@ -128,10 +128,10 @@ def get_recommendations(db_path, data_count, round):
     log_message(f'-------- round: {round}, start: {start} --------','movie_log.txt')
     log_message(f'Total movie count: {total_movie_after}','movie_log.txt')
     log_message(f'Replaced movies count: {replaced_movie_count}','movie_log.txt')
-    log_message(f'Response total:{data.get('total')}','movie_log.txt')
+    log_message(f'Response total:{data.get('total', start)}','movie_log.txt')
     log_message(f"{received_count} Data has been inserted into the SQLite database.",'movie_log.txt')
 
-    if(start > data.get('total')):
+    if(start > data.get('total', start)):
         return False
     return True
 
