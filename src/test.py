@@ -46,3 +46,4 @@ with open('latest_movies_from_doulist.json','r') as f:
 insert_doulists('movies.db', data)
 start=10
 print(start > data.get('total', start))
+

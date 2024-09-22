@@ -150,19 +150,19 @@ if __name__ == '__main__':
 
         log_message(f"getting related movies and doulists for movie: {movie_title}",'movie_log.txt')
         get_related(db_path, movie_id)
-        doulists = get_all_unvisited(db_path, 'doulists', 'id')
-        for doulist_id in doulists:
-            log_message(f"\tworking on doulist: {doulist_id}",'movie_log.txt')
-            crawl_entire_doulist(db_path, data_count, doulist_id)
-            mark_visited(db_path, 'doulists', 'id', doulist_id)
+        # doulists = get_all_unvisited(db_path, 'doulists', 'id')
+        # for doulist_id in doulists:
+        #     log_message(f"\tworking on doulist: {doulist_id}",'movie_log.txt')
+        #     crawl_entire_doulist(db_path, data_count, doulist_id)
+        #     mark_visited(db_path, 'doulists', 'id', doulist_id)
 
         log_message(f"getting related user comments for movie: {movie_title}",'movie_log.txt')
         get_interests(db_path, movie_id)
-        users = get_all_unvisited(db_path, 'interests', 'user_id')
-        for user_id in users:
-            log_message(f"\tworking on user:{user_id}",'movie_log.txt')
-            crawl_entire_user(db_path, data_count, user_id)
-            mark_visited(db_path, 'interests', 'user_id', user_id)
+        # users = get_all_unvisited(db_path, 'interests', 'user_id')
+        # for user_id in users:
+        #     log_message(f"\tworking on user:{user_id}",'movie_log.txt')
+        #     crawl_entire_user(db_path, data_count, user_id)
+        #     mark_visited(db_path, 'interests', 'user_id', user_id)
 
         mark_visited(db_path, 'movies', 'id', movie_id)
 
